@@ -6,9 +6,16 @@ import NavBar from "../components/nav/navbar";
 import Card from "../components/card/card";
 import SectionCard from "../components/card/section-cards";
 
-import getVideos from "../lib/videos";
-export default function Home() {
+import { getVideos } from "../lib/videos";
+
+export async function getServerSideProps(context) {
   const disneyVideos = getVideos();
+  return {
+    props: { disneyVideos }, // will be passed to the page component as props
+  };
+}
+
+export default function Home({ disneyVideos }) {
   return (
     <div className={styles.container}>
       <Head>
