@@ -22,9 +22,6 @@ export default function Home() {
       />
 
       <SectionCard title="Disney" />
-      <Card imgUrl="/static/clifford.webp" size="large" />
-      <Card imgUrl="/static/clifford.webp" size="medium" />
-      <Card imgUrl="/static/clifford.webp" size="small" />
     </div>
   );
 }
