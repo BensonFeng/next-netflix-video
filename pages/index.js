@@ -20,8 +20,9 @@ export default function Home() {
         subTitle="big red dog"
         imgUrl="/static/clifford.webp"
       />
-
-      <SectionCard title="Disney" />
+      <div className={styles.sectionWrapper}>
+        <SectionCard title="Disney" />
+      </div>
     </div>
   );
 }
