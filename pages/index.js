@@ -6,16 +6,15 @@ import NavBar from "../components/nav/navbar";
 import Card from "../components/card/card";
 import SectionCard from "../components/card/section-cards";
 
-import { getVideos } from "../lib/videos";
+import { getVideos, getPopularVideos } from "../lib/videos";
 
 export async function getServerSideProps(context) {
   const disneyVideos = await getVideos("disney trailer");
   const productivityVideos = await getVideos("productivity");
   const travelVideos = await getVideos("travel");
-  // const popularVideos = await getVideos("disney trailer");
-
+  const popularVideos = await getPopularVideos("disney trailer");
   return {
-    props: { disneyVideos, travelVideos, productivityVideos }, // will be passed to the page component as props
+    props: { disneyVideos, travelVideos, productivityVideos, popularVideos }, // will be passed to the page component as props
   };
 }
 
@@ -23,6 +22,7 @@ export default function Home({
   disneyVideos,
   travelVideos,
   productivityVideos,
+  popularVideos,
 }) {
   return (
     <div className={styles.container}>
@@ -30,22 +30,23 @@ export default function Home({
         <title>Netflix</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <NavBar username="test@gmail.com" />
-      <Banner
-        title="Clifford the Big Red Dog"
-        subTitle="big red dog"
-        imgUrl="/static/clifford.webp"
-      />
-      <div className={styles.sectionWrapper}>
-        <SectionCard title="Disney" videos={disneyVideos} size="large" />
-        <SectionCard title="Travel" videos={travelVideos} size="small" />
-        <SectionCard
-          title="Productivity"
-          videos={productivityVideos}
-          size="medium"
+      <div className={styles.main}>
+        <NavBar username="test@gmail.com" />
+        <Banner
+          title="Clifford the Big Red Dog"
+          subTitle="big red dog"
+          imgUrl="/static/clifford.webp"
         />
-        <SectionCard title="Popular" videos={[]} size="small" />
+        <div className={styles.sectionWrapper}>
+          <SectionCard title="Disney" videos={disneyVideos} size="large" />
+          <SectionCard title="Travel" videos={travelVideos} size="small" />
+          <SectionCard
+            title="Productivity"
+            videos={productivityVideos}
+            size="medium"
+          />
+          <SectionCard title="Popular" videos={popularVideos} size="small" />
+        </div>
       </div>
     </div>
   );
