@@ -9,13 +9,21 @@ import SectionCard from "../components/card/section-cards";
 import { getVideos } from "../lib/videos";
 
 export async function getServerSideProps(context) {
-  const disneyVideos = await getVideos();
+  const disneyVideos = await getVideos("disney trailer");
+  const productivityVideos = await getVideos("productivity");
+  const travelVideos = await getVideos("travel");
+  // const popularVideos = await getVideos("disney trailer");
+
   return {
-    props: { disneyVideos }, // will be passed to the page component as props
+    props: { disneyVideos, travelVideos, productivityVideos }, // will be passed to the page component as props
   };
 }
 
-export default function Home({ disneyVideos }) {
+export default function Home({
+  disneyVideos,
+  travelVideos,
+  productivityVideos,
+}) {
   return (
     <div className={styles.container}>
       <Head>
@@ -31,7 +39,13 @@ export default function Home({ disneyVideos }) {
       />
       <div className={styles.sectionWrapper}>
         <SectionCard title="Disney" videos={disneyVideos} size="large" />
-        <SectionCard title="Disney" videos={disneyVideos} size="medium" />
+        <SectionCard title="Travel" videos={travelVideos} size="small" />
+        <SectionCard
+          title="Productivity"
+          videos={productivityVideos}
+          size="medium"
+        />
+        <SectionCard title="Popular" videos={[]} size="small" />
       </div>
     </div>
   );
