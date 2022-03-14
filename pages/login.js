@@ -1,17 +1,34 @@
+import { useState } from "react";
 import Head from "next/head";
 import Image from "next/image";
 
 import styles from "../styles/Login.module.css";
 const Login = () => {
+  const [userMsg, setUserMsg] = useState("");
+  const [email, setEmail] = useState("");
+
+  const handleOnChangeEmail = (e) => {
+    setUserMsg("");
+    const email = e.target.value;
+    setEmail(email);
+  };
+
   const handleLoginWithEmail = (e) => {
     e.preventDefault();
     console.log("Button working");
+
+    if (email) {
+    } else {
+      setUserMsg("Enter a valid email address");
+    }
   };
+
   return (
     <div className={styles.container}>
       <Head>
         <title>Netflix SignIn</title>
       </Head>
+
       <header className={styles.header}>
         <div className={styles.headerWrapper}>
           <a className={styles.logoLink} href="/">
@@ -34,12 +51,13 @@ const Login = () => {
             type="text"
             placeholder="Email address"
             className={styles.emailInput}
+            onChange={handleOnChangeEmail}
           />
 
-          <p className={styles.userMsg}></p>
-          <buttom onClick={handleLoginWithEmail} className={styles.loginBtn}>
-            Sign In
-          </buttom>
+          <p className={styles.userMsg}>{userMsg}</p>
+          <button onClick={handleLoginWithEmail} className={styles.loginBtn}>
+            Sign in
+          </button>
         </div>
       </main>
     </div>
