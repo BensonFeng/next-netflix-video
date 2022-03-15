@@ -8,12 +8,13 @@ import SectionCard from "../components/card/section-cards";
 
 import { getVideos, getPopularVideos } from "../lib/videos";
 
+import { magic } from "../lib/magic-client";
+
 export async function getServerSideProps(context) {
   const disneyVideos = await getVideos("disney trailer");
   const productivityVideos = await getVideos("productivity");
   const travelVideos = await getVideos("travel");
   const popularVideos = await getPopularVideos("disney trailer");
-  console.log({ popularVideos });
   return {
     props: { disneyVideos, travelVideos, productivityVideos, popularVideos }, // will be passed to the page component as props
   };
