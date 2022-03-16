@@ -3,9 +3,7 @@ import Modal from "react-modal";
 import styles from "../../styles/Video.module.css";
 import clsx from "classname";
 Modal.setAppElement("#__next");
-
-const Video = () => {
-  const router = useRouter();
+export async function getStaticProps() {
   const video = {
     title: "Cute dog",
     publishTime: "1990-01-01",
@@ -13,6 +11,27 @@ const Video = () => {
     channelTitle: "Paramount Pictures",
     viewCount: 100000,
   };
+  // Call an external API endpoint to get posts.
+  // You can use any data fetching library
+
+  return {
+    props: {
+      video,
+    },
+    revalidate: 10,
+  };
+}
+export async function getStaticPaths() {
+  const listOfVideos = ["mYfJxlgR2jw", "4zH5iYM4wJo", "KCPEHsAViiQ"];
+
+  return {
+    paths: listOfVideos.map((videoId) => ({ params: { videoId } })),
+    fallback: "blocking", // false or 'blocking'
+  };
+}
+
+const Video = ({ video }) => {
+  const router = useRouter();
   const { title, publishTime, description, channelTitle, viewCount } = video;
   const {
     query: { videoId },
