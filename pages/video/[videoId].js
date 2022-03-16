@@ -1,44 +1,58 @@
 import { useRouter } from "next/router";
 import Modal from "react-modal";
 import styles from "../../styles/Video.module.css";
+import NavBar from "../../components/nav/navbar";
 import clsx from "classname";
+import { getYoutubeVideoById } from "../../lib/videos";
 Modal.setAppElement("#__next");
-export async function getStaticProps() {
-  const video = {
-    title: "Cute dog",
-    publishTime: "1990-01-01",
-    description: "A big red dog, can he get any bigger?",
-    channelTitle: "Paramount Pictures",
-    viewCount: 100000,
-  };
+export async function getStaticProps(context) {
+  // const {
+  //   query: { videoId },
+  // } = router;
+  //   const video = {
+  //     title: "Cute dog",
+  //     publishTime: "1990-01-01",
+  //     description: "A big red dog, can he get any bigger?",
+  //     channelTitle: "Paramount Pictures",
+  //     viewCount: 100000,
+  //   };
   // Call an external API endpoint to get posts.
   // You can use any data fetching library
-
+  const videoId = context.params.videoId;
+  const videoArray = await getYoutubeVideoById(videoId);
   return {
     props: {
-      video,
+      video: videoArray.length > 0 ? videoArray[0] : {},
     },
-    revalidate: 10,
+    revalidate: 10, // In seconds
   };
 }
 export async function getStaticPaths() {
   const listOfVideos = ["mYfJxlgR2jw", "4zH5iYM4wJo", "KCPEHsAViiQ"];
+  const paths = listOfVideos.map((videoId) => ({
+    params: { videoId },
+  }));
 
-  return {
-    paths: listOfVideos.map((videoId) => ({ params: { videoId } })),
-    fallback: "blocking", // false or 'blocking'
-  };
+  return { paths, fallback: "blocking" };
 }
 
 const Video = ({ video }) => {
+  console.log(video);
   const router = useRouter();
-  const { title, publishTime, description, channelTitle, viewCount } = video;
+
+  const {
+    title,
+    publishTime,
+    description,
+    channelTitle,
+    statistics: { viewCount } = { viewCount: 0 },
+  } = video;
   const {
     query: { videoId },
   } = router;
   return (
     <h1 className={styles.container}>
-      dynamic video id: {videoId}
+      <NavBar />
       <Modal
         isOpen={true}
         contentLabel="Watch the video"
