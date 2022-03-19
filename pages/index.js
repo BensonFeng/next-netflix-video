@@ -7,6 +7,7 @@ import Card from "../components/card/card";
 import SectionCard from "../components/card/section-cards";
 
 import { getVideos, getPopularVideos } from "../lib/videos";
+import { startFetchMyQuery } from "../lib/db/hasura";
 
 import { magic } from "../lib/magic-client";
 
@@ -27,6 +28,7 @@ export default function Home({
   productivityVideos,
   popularVideos,
 }) {
+  startFetchMyQuery();
   // console.log(disneyVideos);
   return (
     <div className={styles.container}>
