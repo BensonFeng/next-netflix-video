@@ -1,14 +1,13 @@
 import { magicAdmin } from "../../lib/magic";
 import jwt from "jsonwebtoken";
+import { isNewUser } from "../../lib/db/hasura";
 
 export default async function login(req, res) {
   if (req.method === "POST") {
     try {
       const auth = req.headers.authorization;
       const didToken = auth ? auth.substr(7) : "";
-      // const hello = await magic.token.validate(didToken);
-      // console.log({ hello });
-      console.log("copy this didToken", didToken);
+      console.log(didToken);
       const metadata = await magicAdmin.users.getMetadataByToken(didToken);
       console.log({ metadata });
       const { issuer, publicAddress, email } = metadata;
@@ -28,6 +27,11 @@ export default async function login(req, res) {
         process.env.SECRET_PHRASE
       );
       console.log({ token });
+
+      //CHECK IF USER EXISTS
+
+      const isNewUserQuery = await isNewUser(token);
+      res.send({ done: true, isNewUserQuery });
       res.status(200).json({ done: true });
     } catch (error) {
       console.error("Something went wrong loggin in", error);
