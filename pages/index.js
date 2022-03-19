@@ -6,13 +6,13 @@ import NavBar from "../components/nav/navbar";
 import Card from "../components/card/card";
 import SectionCard from "../components/card/section-cards";
 import { getVideos, getPopularVideos } from "../lib/videos";
+import { startFetchMyQuery } from "../lib/db/hasura";
 
 export async function getServerSideProps(context) {
   const disneyVideos = await getVideos("disney trailer");
   const productivityVideos = await getVideos("productivity");
   const travelVideos = await getVideos("travel");
   const popularVideos = await getPopularVideos("disney trailer");
-  console.log({ popularVideos });
   return {
     props: { disneyVideos, travelVideos, productivityVideos, popularVideos }, // will be passed to the page component as props
   };
@@ -25,6 +25,7 @@ export default function Home({
   popularVideos,
 }) {
   // console.log(disneyVideos);
+  startFetchMyQuery();
   return (
     <div className={styles.container}>
       <Head>
