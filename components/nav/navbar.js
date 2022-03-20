@@ -4,13 +4,29 @@ import styles from "./navbar.module.css";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Image from "next/image";
+
 import { magic } from "../../lib/magic-client";
 
 const NavBar = () => {
-  const router = useRouter();
-
   const [showDropDown, setshowDropDown] = useState(false);
   const [username, setUsername] = useState("");
+  const router = useRouter();
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const { email, publicAddress } = await magic.user.getMetadata();
+        const didToken = await magic.user.getIdToken();
+        console.log({ didToken });
+        if (email) {
+          setUsername(email);
+        }
+      } catch (error) {
+        // Handle errors if required!
+        console.log("error retrieving email", error);
+      }
+    })();
+  }, []);
 
   const handleOnClickHome = (e) => {
     e.preventDefault();
@@ -41,22 +57,6 @@ const NavBar = () => {
       console.log("error retrieving email", error);
     }
   };
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const { email, publicAddress } = await magic.user.getMetadata();
-        const didToken = await magic.user.getIdToken();
-        console.log({ didToken });
-        if (email) {
-          setUsername(email);
-        }
-      } catch (error) {
-        // Handle errors if required!
-        console.log("error retrieving email", error);
-      }
-    })();
-  }, []);
   return (
     <div className={styles.container}>
       <div className={styles.wrapper}>

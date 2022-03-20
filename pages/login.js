@@ -36,13 +36,15 @@ const Login = () => {
 
   const handleLoginWithEmail = async (e) => {
     e.preventDefault();
-    console.log("Button working");
+
     if (email) {
       if (email === "bf827208@gmail.com") {
         // log in a user by their email
         try {
           setIsLoading(true);
-          const didToken = await magic.auth.loginWithMagicLink({ email });
+          const didToken = await magic.auth.loginWithMagicLink({
+            email,
+          });
           console.log(didToken);
           if (didToken) {
             router.push("/");

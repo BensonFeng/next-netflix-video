@@ -4,7 +4,7 @@ import styles from "../styles/Home.module.css";
 import Banner from "../components/banner/banner";
 import NavBar from "../components/nav/navbar";
 import Card from "../components/card/card";
-import SectionCard from "../components/card/section-cards";
+import SectionCards from "../components/card/section-cards";
 import { getVideos, getPopularVideos } from "../lib/videos";
 import { startFetchMyQuery } from "../lib/db/hasura";
 
@@ -25,7 +25,7 @@ export default function Home({
   popularVideos,
 }) {
   // console.log(disneyVideos);
-  startFetchMyQuery();
+  // startFetchMyQuery();
   return (
     <div className={styles.container}>
       <Head>
@@ -41,14 +41,14 @@ export default function Home({
           imgUrl="/static/clifford.webp"
         />
         <div className={styles.sectionWrapper}>
-          <SectionCard title="Disney" videos={disneyVideos} size="large" />
-          <SectionCard title="Travel" videos={travelVideos} size="small" />
-          <SectionCard
+          <SectionCards title="Disney" videos={disneyVideos} size="large" />
+          <SectionCards title="Travel" videos={travelVideos} size="small" />
+          <SectionCards
             title="Productivity"
             videos={productivityVideos}
             size="medium"
           />
-          <SectionCard title="Popular" videos={popularVideos} size="small" />
+          <SectionCards title="Popular" videos={popularVideos} size="small" />
         </div>
       </div>
     </div>

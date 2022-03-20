@@ -2,22 +2,10 @@ import { useRouter } from "next/router";
 import Modal from "react-modal";
 import styles from "../../styles/Video.module.css";
 import NavBar from "../../components/nav/navbar";
-import clsx from "classname";
+import clsx from "classnames";
 import { getYoutubeVideoById } from "../../lib/videos";
 Modal.setAppElement("#__next");
 export async function getStaticProps(context) {
-  // const {
-  //   query: { videoId },
-  // } = router;
-  //   const video = {
-  //     title: "Cute dog",
-  //     publishTime: "1990-01-01",
-  //     description: "A big red dog, can he get any bigger?",
-  //     channelTitle: "Paramount Pictures",
-  //     viewCount: 100000,
-  //   };
-  // Call an external API endpoint to get posts.
-  // You can use any data fetching library
   const videoId = context.params.videoId;
   const videoArray = await getYoutubeVideoById(videoId);
   return {
@@ -67,7 +55,7 @@ const Video = ({ video }) => {
           width="100%"
           height="360"
           src={`https://www.youtube.com/embed/${videoId}?autoplay=0&origin=http://example.com&controls=0&rel=1`}
-          frameborder="0"
+          frameBorder="0"
         ></iframe>
         <div className={styles.modalBody}>
           <div className={styles.modalBodyContent}>
