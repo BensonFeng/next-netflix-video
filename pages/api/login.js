@@ -1,6 +1,6 @@
 import { magicAdmin } from "../../lib/magic";
 import jwt from "jsonwebtoken";
-import { isNewUser } from "../../lib/db/hasura";
+import { isNewUser, createNewUser } from "../../lib/db/hasura";
 
 export default async function login(req, res) {
   if (req.method === "POST") {
@@ -29,6 +29,12 @@ export default async function login(req, res) {
       //CHECK IF USER EXISTS
 
       const isNewUserQuery = await isNewUser(token, metadata.issuer);
+      if (isNewUserQuery) {
+        const createNewUserMutation = await createNewUser(token, metadata);
+        res.send({ done: true, msg: "is a new user" });
+      } else {
+        res.send({ done: true, msg: "not a new user" });
+      }
       res.send({ done: true, isNewUserQuery });
       res.status(200).json({ done: true });
     } catch (error) {
