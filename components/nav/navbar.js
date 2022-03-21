@@ -8,7 +8,7 @@ import Image from "next/image";
 import { magic } from "../../lib/magic-client";
 
 const NavBar = () => {
-  const [showDropDown, setshowDropDown] = useState(false);
+  const [showDropdown, setshowDropdown] = useState(false);
   const [username, setUsername] = useState("");
   const router = useRouter();
 
@@ -40,7 +40,7 @@ const NavBar = () => {
 
   const handleShowDropDown = (e) => {
     e.preventDefault();
-    setshowDropDown(!showDropDown);
+    setshowDropdown(!showDropdown);
   };
 
   const handleSignOut = async (e) => {
@@ -90,7 +90,7 @@ const NavBar = () => {
               />
             </button>
 
-            {showDropDown && (
+            {showDropdown && (
               <div className={styles.navDropdown}>
                 <div>
                   <a className={styles.linkName} onClick={handleSignOut}>
