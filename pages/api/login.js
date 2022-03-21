@@ -8,10 +8,9 @@ export default async function login(req, res) {
     try {
       const auth = req.headers.authorization;
       const didToken = auth ? auth.substr(7) : "";
-      console.log(didToken);
+
       const metadata = await magicAdmin.users.getMetadataByToken(didToken);
-      console.log({ metadata });
-      const { issuer, publicAddress, email } = metadata;
+
       const token = jwt.sign(
         {
           ...metadata,
@@ -25,25 +24,14 @@ export default async function login(req, res) {
         },
         process.env.JWT_SECRET
       );
-      console.log({ token });
-
-      //CHECK IF USER EXISTS
 
       const isNewUserQuery = await isNewUser(token, metadata.issuer);
-      console.log(isNewUserQuery);
-      if (isNewUserQuery) {
-        const createNewUserMutation = await createNewUser(token, metadata);
-        const cookie = setTokenCookie(token, res);
-        res.send({ done: true, msg: "is a new user" });
-      } else {
-        const cookie = setTokenCookie(token, res);
-        res.send({ done: true, msg: "not a new user" });
-      }
-      res.send({ done: true, isNewUserQuery });
-      res.status(200).json({ done: true });
+      isNewUserQuery && (await createNewUser(token, metadata));
+      setTokenCookie(token, res);
+      res.send({ done: true });
     } catch (error) {
-      console.error("Something went wrong loggin in", error);
-      res.status(500).json({ done: false });
+      console.error("Something went wrong logging in", error);
+      res.status(500).send({ done: false });
     }
   } else {
     res.send({ done: false });
