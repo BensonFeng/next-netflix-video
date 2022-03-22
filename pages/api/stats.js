@@ -8,15 +8,15 @@ export default async function stats(req, res) {
       if (!token) {
         res.status(403).send();
       } else {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        console.log({ decoded });
-        res.send({ msg: "it works", decoded });
-        userId = "ankyyyy";
-        videoId = "4zH5iYM4wJo";
+        const videoId = req.query.videoId;
+        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+        res.send({ msg: "it works", decodedToken });
+        userId = decodedToken.issuer;
+        // videoId = "4zH5iYM4wJo";
 
         const findVideoId = await findVideoIdByUser(token, userId, videoId);
         console.log({ findVideoId });
-        res.send({ msg: "it works", decoded, findVideoId });
+        res.send({ msg: "it works", decodedToken, findVideoId });
       }
     } catch (error) {
       console.error("Error occurred /stats,", error);
