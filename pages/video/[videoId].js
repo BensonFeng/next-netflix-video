@@ -44,16 +44,43 @@ const Video = ({ video }) => {
     statistics: { viewCount } = { viewCount: 0 },
   } = video;
 
-  const handleToggleDislike = () => {
+  const handleToggleDislike = async () => {
     console.log("Dislike btn working");
     setToggleDisLike(!toggleDisLike);
     setToggleLike(toggleDisLike);
+
+    const val = !toggleDisLike;
+
+    const response = await fetch("/api/stats", {
+      method: "POST",
+      body: JSON.stringify({
+        videoId,
+        favourited: val ? 1 : 0,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    console.log("data", await response.json());
   };
 
-  const handleToggleLike = () => {
+  const handleToggleLike = async () => {
     console.log("Like btn working");
-    setToggleLike(!toggleLike);
+    const va = !toggleLike;
+    setToggleLike(val);
     setToggleDisLike(toggleLike);
+
+    const response = await fetch("/api/stats", {
+      method: "POST",
+      body: JSON.stringify({
+        videoId,
+        favourited: val ? 1 : 0,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    console.log("data", await response.json());
   };
 
   return (
