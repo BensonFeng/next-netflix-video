@@ -4,14 +4,25 @@ import styles from "../styles/Home.module.css";
 import Banner from "../components/banner/banner";
 import NavBar from "../components/nav/navbar";
 import SectionCards from "../components/card/section-cards";
+import { verifyToken } from "../lib/util";
 import {
   getVideos,
   getPopularVideos,
   getWatchItAgainVideos,
 } from "../lib/videos";
 export async function getServerSideProps(context) {
-  const token = context.req ? context.cookies.token : null;
-  const userId = "did:ethr:0xE8cF8eC324eebf1d1AE2ebDD450b7C1306dcbe02";
+  const token = context.req ? context.req?.token : null;
+  const userId = null;
+
+  if (!userId) {
+    return {
+      props: {},
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
   const watchItAgainVideos = await getWatchItAgainVideos(userId, token);
   console.log({ watchItAgainVideos });
   const disneyVideos = await getVideos("disney trailer");
