@@ -3,17 +3,30 @@ import styles from "../styles/Home.module.css";
 
 import Banner from "../components/banner/banner";
 import NavBar from "../components/nav/navbar";
-import Card from "../components/card/card";
 import SectionCards from "../components/card/section-cards";
-import { getVideos, getPopularVideos } from "../lib/videos";
-
+import {
+  getVideos,
+  getPopularVideos,
+  getWatchItAgainVideos,
+} from "../lib/videos";
 export async function getServerSideProps(context) {
+  const token =
+    "WyIweDNjZjFhNmM1NTBhMWI1NjlmNzAxMDc0OTRkNDY3ZTFlMDQ0ZGU4ZDE1OTNmYjI4M2MyNWIwODc5YTQzMGI4MGEwYjQzOTg0YjFhYTY4N2VkNjVlODI2ZDk2YjZmYzM4MmRkZWZkZGM0Mjk1NWRhMzFhNDE5MjU3ODQ5M2UzZTM4MWMiLCJ7XCJpYXRcIjoxNjQ3NjIxOTEwLFwiZXh0XCI6MTY0NzYyMjgxMCxcImlzc1wiOlwiZGlkOmV0aHI6MHhFOGNGOGVDMzI0ZWViZjFkMUFFMmViREQ0NTBiN0MxMzA2ZGNiZTAyXCIsXCJzdWJcIjpcImxITUlLNmdYTFB3TS01eTJEWm1McmtobEVxMkxUM2J1TFhXYnlhTjM3bGs9XCIsXCJhdWRcIjpcIkRoUHFKRm1lN3dxVjRGZGdmcHNHWWw4MmV2SmJ3TmNfQTJtVWFIUzVSblE9XCIsXCJuYmZcIjoxNjQ3NjIxOTEwLFwidGlkXCI6XCI3NmNiMDI4OS1jYzMxLTQ5NDUtYTQ4Zi05MzFhOTNhYTE3Y2FcIixcImFkZFwiOlwiMHhlNDc1NzZiMjlmOGIwOGNiYTk5MmMyODMzNGNhNjU1OTkyZTVlOTc4YjFiYWQxOTE2NWMxYTM3NDY0OGM5ZGMwMTFmZGQyOTkyMWMxOGRjMTM1NjYyMDc5ZGY5MjdlZmM1MmNjY2RjZjM0MWNmNDRiZjU2YmRkZDhjNDgzNDZjOTFiXCJ9Il0=";
+  const userId = "did:ethr:0xE8cF8eC324eebf1d1AE2ebDD450b7C1306dcbe02";
+  const watchItAgainVideos = await getWatchItAgainVideos(userId, token);
+  console.log({ watchItAgainVideos });
   const disneyVideos = await getVideos("disney trailer");
   const productivityVideos = await getVideos("productivity");
   const travelVideos = await getVideos("travel");
   const popularVideos = await getPopularVideos("disney trailer");
   return {
-    props: { disneyVideos, travelVideos, productivityVideos, popularVideos }, // will be passed to the page component as props
+    props: {
+      disneyVideos,
+      travelVideos,
+      productivityVideos,
+      popularVideos,
+      watchItAgainVideos,
+    }, // will be passed to the page component as props
   };
 }
 
@@ -22,6 +35,7 @@ export default function Home({
   travelVideos,
   productivityVideos,
   popularVideos,
+  watchItAgainVideos,
 }) {
   // console.log(disneyVideos);
   return (
@@ -40,6 +54,11 @@ export default function Home({
         />
         <div className={styles.sectionWrapper}>
           <SectionCards title="Disney" videos={disneyVideos} size="large" />
+          <SectionCards
+            title="Watch it again"
+            videos={watchItAgainVideos}
+            size="small"
+          />
           <SectionCards title="Travel" videos={travelVideos} size="small" />
           <SectionCards
             title="Productivity"
