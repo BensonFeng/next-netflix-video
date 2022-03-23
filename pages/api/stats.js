@@ -17,10 +17,10 @@ export default async function stats(req, res) {
           const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
           res.send({ msg: "it works", decodedToken });
           userId = decodedToken.issuer;
-          // videoId = "4zH5iYM4wJo";
 
-          const findVideoId = await findVideoIdByUser(token, userId, videoId);
-          if (findVideoId) {
+          const findVideo = await findVideoIdByUser(token, userId, videoId);
+          const doesStatsExist = findVideo?.length > 0;
+          if (doesStatsExist) {
             // update it
             const response = await updateStats(token, {
               watched,
@@ -38,6 +38,33 @@ export default async function stats(req, res) {
               favourited,
             });
             res.send({ data: response });
+          }
+        }
+      }
+    } catch (error) {
+      console.error("Error occurred /stats,", error);
+      res.status(500).send({ done: false, error: error?.message });
+    }
+  } else {
+    try {
+      const token = req.cookies.token;
+      if (!token) {
+        res.status(403).send({});
+      } else {
+        const { videoId } = req.body;
+        if (videoId) {
+          const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+          res.send({ msg: "it works", decodedToken });
+          userId = decodedToken.issuer;
+
+          const findVideo = await findVideoIdByUser(token, userId, videoId);
+          const doesStatsExist = findVideo?.length > 0;
+          if (doesStatsExist) {
+            res.send(findVideo);
+          } else {
+            // add it
+            res.status(404);
+            res.send({ user: null, msg: "Video not found" });
           }
         }
       }
