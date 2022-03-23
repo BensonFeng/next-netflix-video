@@ -4,25 +4,15 @@ import styles from "../styles/Home.module.css";
 import Banner from "../components/banner/banner";
 import NavBar from "../components/nav/navbar";
 import SectionCards from "../components/card/section-cards";
-import { verifyToken } from "../lib/util";
 import {
   getVideos,
   getPopularVideos,
   getWatchItAgainVideos,
 } from "../lib/videos";
-export async function getServerSideProps(context) {
-  const token = context.req ? context.req?.token : null;
-  const userId = null;
+import useRedirectUser from "../utils/redirectUser";
 
-  if (!userId) {
-    return {
-      props: {},
-      redirect: {
-        destination: "/login",
-        permanent: false,
-      },
-    };
-  }
+export async function getServerSideProps(context) {
+  const { userId, token } = await useRedirectUser(context);
   const watchItAgainVideos = await getWatchItAgainVideos(userId, token);
   console.log({ watchItAgainVideos });
   const disneyVideos = await getVideos("disney trailer");
