@@ -2,19 +2,21 @@ import Head from "next/head";
 import NavBar from "../../components/nav/navbar";
 import SectionCards from "../../components/card/section-cards";
 
-const MyList = () => {
+const MyList = ({ myListVideos }) => {
   return (
     <div>
       <Head>
         <title>My list</title>
       </Head>
-      <main>
+      <main className={styles.main}>
         <NavBar />
-        <div>
+        <div className={styles.sectionWrapper}>
           <SectionCards
-            title="Productivity"
-            videos={productivityVideos}
-            size="medium"
+            title="My List"
+            videos={myListVideos}
+            size="small"
+            shouldWrap
+            shouldScale={false}
           />
         </div>
       </main>
