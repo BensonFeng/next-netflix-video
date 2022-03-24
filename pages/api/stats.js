@@ -3,24 +3,23 @@ import {
   updateStats,
   insertStats,
 } from "../../lib/db/hasura";
-import { verifyToken } from "../lib/util";
+import { verifyToken } from "../../lib/utils";
 
-export default async function stats(req, res) {
+export default async function stats(req, resp) {
   try {
     const token = req.cookies.token;
     if (!token) {
-      res.status(403).send({});
+      resp.status(403).send({});
     } else {
       const inputParams = req.method === "POST" ? req.body : req.query;
       const { videoId } = inputParams;
       if (videoId) {
-        userId = verifyToken(token);
+        const userId = await verifyToken(token);
         const findVideo = await findVideoIdByUser(token, userId, videoId);
         const doesStatsExist = findVideo?.length > 0;
 
         if (req.method === "POST") {
           const { favourited, watched = true } = req.body;
-
           if (doesStatsExist) {
             // update it
             const response = await updateStats(token, {
@@ -29,6 +28,7 @@ export default async function stats(req, res) {
               videoId,
               favourited,
             });
+            resp.send({ data: response });
           } else {
             // add it
             const response = await insertStats(token, {
@@ -37,17 +37,20 @@ export default async function stats(req, res) {
               videoId,
               favourited,
             });
-            res.send({ data: response });
+            resp.send({ data: response });
           }
         } else {
-          // add it
-          res.status(404);
-          res.send({ user: null, msg: "Video not found" });
+          if (doesStatsExist) {
+            resp.send(findVideo);
+          } else {
+            resp.status(404);
+            resp.send({ user: null, msg: "Video not found" });
+          }
         }
       }
     }
   } catch (error) {
-    console.error("Error occurred /stats,", error);
-    res.status(500).send({ done: false, error: error?.message });
+    console.error("Error occurred /stats", error);
+    resp.status(500).send({ done: false, error: error?.message });
   }
 }

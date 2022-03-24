@@ -3,7 +3,9 @@ import styles from "../styles/Home.module.css";
 
 import Banner from "../components/banner/banner";
 import NavBar from "../components/nav/navbar";
+
 import SectionCards from "../components/card/section-cards";
+
 import {
   getVideos,
   getPopularVideos,
@@ -14,11 +16,13 @@ import useRedirectUser from "../utils/redirectUser";
 export async function getServerSideProps(context) {
   const { userId, token } = await useRedirectUser(context);
   const watchItAgainVideos = await getWatchItAgainVideos(userId, token);
-  console.log({ watchItAgainVideos });
+
   const disneyVideos = await getVideos("disney trailer");
-  const productivityVideos = await getVideos("productivity");
-  const travelVideos = await getVideos("travel");
-  const popularVideos = await getPopularVideos("disney trailer");
+  const productivityVideos = await getVideos("Productivity");
+
+  const travelVideos = await getVideos("indie music");
+
+  const popularVideos = await getPopularVideos();
   return {
     props: {
       disneyVideos,
@@ -26,7 +30,7 @@ export async function getServerSideProps(context) {
       productivityVideos,
       popularVideos,
       watchItAgainVideos,
-    }, // will be passed to the page component as props
+    },
   };
 }
 
@@ -37,21 +41,22 @@ export default function Home({
   popularVideos,
   watchItAgainVideos,
 }) {
-  // console.log(disneyVideos);
   return (
     <div className={styles.container}>
       <Head>
         <title>Netflix</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
       <div className={styles.main}>
-        <NavBar username="test@gmail.com" />
+        <NavBar username="test@gmailcom" />
         <Banner
           videoId="4zH5iYM4wJo"
-          title="Clifford the Big Red Dog"
+          title="Clifford the red dog"
           subTitle="big red dog"
           imgUrl="/static/clifford.webp"
         />
+
         <div className={styles.sectionWrapper}>
           <SectionCards title="Disney" videos={disneyVideos} size="large" />
           <SectionCards
